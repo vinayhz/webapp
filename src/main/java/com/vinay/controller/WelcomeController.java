@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.vinay.jsp;
+package com.vinay.controller;
 
 import java.util.Date;
 import java.util.Map;
@@ -24,6 +24,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.vinay.dao.UserRepository;
+
+import com.vinay.models.User;
 
 @Controller
 public class WelcomeController {
@@ -50,12 +54,12 @@ public class WelcomeController {
 	public String saveUser(@PathVariable String username, Map<String, String> map) {
 
 		User user = new User();
-		user.setUsername(username);
+		user.setUserName(username);
 
 		user = userRepository.save(user);
 
 		map.put("Id", Long.toString(user.getUserId()));
-		map.put("username", user.getUsername());
+		map.put("username", user.getUserName());
 
 		return "abc";
 	}
