@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WelcomeController {
 
 	@Value("${application.message:Hello World}")
-	private String message = "Hello World";
+	private String message = "Hello World1";
 
 	@Autowired
 	UserRepository userRepository;
