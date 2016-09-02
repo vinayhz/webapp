@@ -16,52 +16,79 @@
 
 package com.vinay.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.vinay.dao.UserRepository;
-
 import com.vinay.models.User;
+import com.vinay.service.UserService;
 
 @Controller
 public class WelcomeController {
 
-	@Value("${application.message:Hello World}")
-	private String message = "Hello World1";
-
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 
 	@RequestMapping("/")
 	public String welcome(Map<String, Object> model) {
 		model.put("time", new Date());
-		model.put("message", this.message);
 		return "welcome";
 	}
 
-	@RequestMapping("/foo")
-	public String foo(Map<String, Object> model) {
-		throw new RuntimeException("Foo");
-	}
-
 	@RequestMapping("/user/{username}")
-	public String saveUser(@PathVariable String username, Map<String, String> map) {
+	public String saveUser(@PathVariable String username, Map<String, List<User>> map) {
 
 		User user = new User();
 		user.setUserName(username);
 
-		user = userRepository.save(user);
+		user = userService.save(user);
 
-		map.put("Id", Long.toString(user.getUserId()));
-		map.put("username", user.getUserName());
+		// map.put("userId", Long.toString(user.getUserId()));
+		// map.put("userName", user.getUserName());
+		// map.put("created", user.getCreated().toString());
+		// map.put("lastUpdated", user.getUpdated().toString());
 
-		return "abc";
+		// String status = null;
+		//
+		// if (user.getIsDeleted() == 0) {
+		// status = "Active";
+		// } else {
+		// status = "Inactive";
+		// }
+		//
+		// map.put("status", status);
+
+		List<User> userList = new ArrayList<User>();
+		userList.add(user);
+
+		map.put("userList", userList);
+
+		return "user";
+	}
+
+	@RequestMapping("/user/getAll")
+	public String getAll(Map<String, List<User>> map) {
+
+		map.put("userList", userService.findAll());
+
+		return "user";
+	}
+
+	@RequestMapping("/user/getUser/{userId}")
+	public String getUser(@PathVariable Long userId, Map<String, List<User>> map) {
+
+		List<User> userList = new ArrayList<User>();
+		userList.add(userService.findOne(userId));
+
+		map.put("userList", userList);
+
+		return "user";
 	}
 
 }
