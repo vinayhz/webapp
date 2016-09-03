@@ -11,6 +11,7 @@ public interface UserService {
 	public List<User> findAll();
 
 	public User findOne(Long userId);
-	
+
 	public User update(User user);
+
 }
